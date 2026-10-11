@@ -45,6 +45,8 @@ Readiness is available at `GET /health`. Interactive API docs are at [http://loc
 
 ## Checks and remaining verification
 
-There is no automated test suite in this repository. Run `python -m py_compile app/main.py` for a syntax check, then exercise the API against a disposable MongoDB database. Include concurrent duplicate punches, overnight shifts, corrections and audit history, employees with no logs, joiners, weekend records, leaderboard ties, and missing trend dates. The `/admin/explain/{endpoint}` route can be used to inspect plans for the supported endpoint names.
+Manual Swagger checks covered employee creation and listing; attendance punch-in and punch-out; duplicate punch-in returning HTTP 409; attendance regularization and audit history; employee monthly analytics; department summary; late leaderboard; and department trend.
 
-MongoDB integration tests and execution-plan/index checks have **not** been run for this project. Correct runtime behavior, concurrency under MongoDB, and `IXSCAN`/`COLLSCAN` results remain unverified.
+MongoDB Explain responses were inspected for `attendance_list`, `employee_monthly`, `department_summary`, `late_leaderboard`, and `department_trend`. The inspected responses executed successfully and showed the expected index usage for the tested data. These checks cover the tested data only; they do not establish behavior for all data shapes or query plans at scale.
+
+No automated test suite is present in this repository. Exhaustive edge-case testing has not been completed; cases still needing broader coverage include concurrent requests, overnight shifts, employees with no logs, mid-month joiners, weekend records, leaderboard ties, and missing trend dates. The manual checks do not guarantee correctness under every concurrency condition or with large datasets.
