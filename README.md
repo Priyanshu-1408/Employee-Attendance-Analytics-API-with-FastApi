@@ -19,7 +19,7 @@ The requirements install FastAPI, Uvicorn, PyMongo, Pydantic, and python-dotenv.
 Set `MONGO_URI` and `MONGO_DB` in the shell, or place them in a local `.env` file in the repository root:
 
 ```dotenv
-MONGO_URI=mongodb://localhost:27017
+MONGO_URI=mongodb+srv://<username>:<password>@<cluster-url>/
 MONGO_DB=attendance_db
 ```
 
