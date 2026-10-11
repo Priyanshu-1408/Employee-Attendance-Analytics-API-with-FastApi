@@ -1,7 +1,11 @@
-# DECISIONS.md  (about 150-200 words in total - plain language, your own words)
+# Implementation decisions
 
-1. **Indexes.** Which indexes did you create, and which query or guarantee does each one serve? Which one did you consider and reject?
-2. **Punch-in race.** Two identical punch-in requests arrive at the same instant. Walk through exactly what happens in your code.
-3. **Ties.** Two employees are tied on late minutes at the cutoff of `limit`. What does your leaderboard return, and why?
-4. **Headcount.** How does your department summary make sure employees with zero logs are counted?
-5. **One thing you would change** if this had to serve 100x the data.
+1. **Indexes.** Unique employee code and attendance `(emp_code, date)` indexes enforce identity and one daily record. Department/code and attendance date/employee indexes support lists; employee department/joined and joined indexes support headcount. Employee/date/status, status/date, and date/late/employee indexes support analytics. I rejected email indexing because no endpoint filters by email.
+
+2. **Punch-in race.** Both requests can attempt insertion. MongoDB's unique attendance key allows one record for that employee/date; the other insert raises a duplicate-key error, mapped to `409`. The guarantee comes from the index, not a pre-insert check.
+
+3. **Ties.** The leaderboard ranks by total late minutes alone, filters on `rank <= limit`, then sorts by employee code. Competition ranking skips the next rank after a tie, and every employee tied at the cutoff is returned.
+
+4. **Headcount.** Department summary starts with employees joined by month end, then looks up logs and groups per employee before department. An employee with no logs still contributes one to headcount.
+
+5. **100x data.** I would measure plans and workload, then consider daily summary collections for repeated analytics and partitioning or sharding if one indexed deployment no longer meets latency needs.
