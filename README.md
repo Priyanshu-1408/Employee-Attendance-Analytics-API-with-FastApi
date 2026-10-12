@@ -1,3 +1,8 @@
+# Employee Attendance & Analytics API
+
+**Live API:** https://employee-attendance-api-xutu.onrender.com
+
+**API Documentation:** https://employee-attendance-api-xutu.onrender.com/docs
 # HROne Employee Attendance & Analytics API
 
 FastAPI and MongoDB service for employee records, attendance punches and corrections, monthly analytics, department trends, and MongoDB explain output. All application code is in `app/main.py`.
